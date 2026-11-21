@@ -1,3 +1,9 @@
+import os, tempfile
+try:
+    import yfinance as yf
+    yf.set_tz_cache_location(os.path.join(tempfile.gettempdir(), "yf_tz_cache"))
+except Exception:
+    pass
 import time
 from datetime import datetime
 from zoneinfo import ZoneInfo
