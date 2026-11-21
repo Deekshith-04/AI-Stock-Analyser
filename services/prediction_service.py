@@ -290,10 +290,13 @@ def get_lstm_prediction(
         axis=0,
     )
 
-    probabilities = lstm_model.predict(
+    import gc, tensorflow as tf
+    probabilities = lstm_model(
         model_input,
-        verbose=0,
-    )[0]
+        training=False,
+    ).numpy()[0]
+    tf.keras.backend.clear_session()
+    gc.collect()
 
     predicted_index = int(
         np.argmax(probabilities)
