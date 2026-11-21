@@ -27,7 +27,12 @@ rf_model = joblib.load(RF_MODEL_PATH)
 
 LSTM_MODEL_PATH = MODEL_DIR / "lstm_model.keras"
 
-lstm_model = tf.keras.models.load_model(LSTM_MODEL_PATH)
+try:
+    tf.config.threading.set_intra_op_threads(1)
+    tf.config.threading.set_inter_op_threads(1)
+except RuntimeError:
+    pass
+lstm_model = tf.keras.models.load_model(LSTM_MODEL_PATH, compile=False)
 
 
 # ---------------------------------------------------------
