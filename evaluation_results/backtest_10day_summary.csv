@@ -1,0 +1,4 @@
+Recommendation,Evaluated_Count,Mean_10Day_Return_Percent,Median_10Day_Return_Percent,Positive_Return_Percent,Directional_Hit_Rate_Percent
+BUY,7721,0.8026,1.2494,58.52,58.52
+HOLD,13212,0.9535,0.904,58.74,
+SELL,1383,0.3134,0.6431,54.74,45.12
