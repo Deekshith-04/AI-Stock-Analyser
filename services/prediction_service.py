@@ -237,9 +237,7 @@ def get_rf_prediction(
         latest_row
     )[0]
 
-    prediction = rf_model.predict(
-        latest_row
-    )[0]
+    prediction = rf_model.classes_[int(np.argmax(probabilities))]
 
     probability_map = {
         str(cls): float(prob)
@@ -295,7 +293,6 @@ def get_lstm_prediction(
         model_input,
         training=False,
     ).numpy()[0]
-    tf.keras.backend.clear_session()
     gc.collect()
 
     predicted_index = int(
