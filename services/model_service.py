@@ -1,7 +1,8 @@
 from pathlib import Path
 import json
 import joblib
-import tensorflow as tf
+import os as _os_tf_guard
+tf = None if _os_tf_guard.environ.get('RENDER', '').lower() == 'true' else __import__('tensorflow')
 
 
 # ---------------------------------------------------------
@@ -16,9 +17,21 @@ MODEL_DIR = BASE_DIR / "models"
 # LOAD RANDOM FOREST
 # ---------------------------------------------------------
 
+
+# RENDER_SKIP_HEAVY_MODELS
+import os as _os
+if _os.environ.get("RENDER", "").lower() == "true":
+    rf_model = None
+    lstm_model = None
+    lstm_scaler = None
+    lstm_label_encoder = None
+
 RF_MODEL_PATH = MODEL_DIR / "random_forest_model.joblib"
 
-rf_model = joblib.load(RF_MODEL_PATH)
+if _os_tf_guard.environ.get('RENDER', '').lower() != 'true':
+    rf_model = joblib.load(RF_MODEL_PATH)
+else:
+    rf_model = None
 
 
 # ---------------------------------------------------------
@@ -27,7 +40,10 @@ rf_model = joblib.load(RF_MODEL_PATH)
 
 LSTM_MODEL_PATH = MODEL_DIR / "lstm_model.keras"
 
-lstm_model = tf.keras.models.load_model(LSTM_MODEL_PATH, compile=False)
+if _os_tf_guard.environ.get('RENDER', '').lower() != 'true':
+    lstm_model = tf.keras.models.load_model(LSTM_MODEL_PATH, compile=False)
+else:
+    lstm_model = None
 
 
 # ---------------------------------------------------------
@@ -37,8 +53,14 @@ lstm_model = tf.keras.models.load_model(LSTM_MODEL_PATH, compile=False)
 LSTM_SCALER_PATH = MODEL_DIR / "lstm_scaler.joblib"
 LSTM_ENCODER_PATH = MODEL_DIR / "lstm_label_encoder.joblib"
 
-lstm_scaler = joblib.load(LSTM_SCALER_PATH)
-lstm_label_encoder = joblib.load(LSTM_ENCODER_PATH)
+if _os_tf_guard.environ.get('RENDER', '').lower() != 'true':
+    lstm_scaler = joblib.load(LSTM_SCALER_PATH)
+else:
+    lstm_scaler = None
+if _os_tf_guard.environ.get('RENDER', '').lower() != 'true':
+    lstm_label_encoder = joblib.load(LSTM_ENCODER_PATH)
+else:
+    lstm_label_encoder = None
 
 
 # ---------------------------------------------------------
