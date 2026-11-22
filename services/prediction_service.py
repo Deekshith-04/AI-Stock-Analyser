@@ -637,6 +637,25 @@ def calculate_risk(
 
 def predict_stock(
     ticker: str,
+    if os.environ.get("RENDER", "").lower() == "true":
+        from services.market_data_service import get_stock_history
+        hist = get_stock_history(ticker, period="1mo")
+        close_val = float(hist["Close"].dropna().iloc[-1]) if hist is not None and not hist.empty and "Close" in hist else 0.0
+        prev_val = float(hist["Close"].dropna().iloc[-2]) if hist is not None and len(hist["Close"].dropna()) > 1 else close_val
+        pct = ((close_val - prev_val) / prev_val * 100.0) if prev_val else 0.0
+        rec = "BUY" if pct > 0.5 else ("SELL" if pct < -0.5 else "HOLD")
+        return {
+            "ticker": ticker,
+            "close": round(close_val, 2),
+            "change_percent": round(pct, 2),
+            "recommendation": rec,
+            "model_probability": 0.65,
+            "probability_margin": 0.15,
+            "probabilities": {"BUY": 0.65 if rec == "BUY" else 0.2, "HOLD": 0.65 if rec == "HOLD" else 0.2, "SELL": 0.65 if rec == "SELL" else 0.2},
+            "risk": {"level": "Medium", "score": 50},
+            "explanation": "Lightweight Render free-tier signal based on recent price momentum.",
+            "data_source": "Render Lightweight Mode",
+        }
     period: str = "6mo",
 ):
     """
