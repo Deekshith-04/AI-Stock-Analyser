@@ -657,7 +657,6 @@ def predict_stock(ticker: str):
             "data_source": "Render Lightweight Mode",
         }
     period: str = "6mo",
-):
     """
     Complete prediction pipeline for one stock.
     """
