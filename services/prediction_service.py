@@ -820,18 +820,23 @@ def predict_stock(ticker: str, period: str = "6mo"):
                     "HOLD": 64.0 if rec == "HOLD" else 18.0,
                     "SELL": 64.0 if rec == "SELL" else 18.0,
                 }
+                trend_text = "upward price momentum" if pct > 0.4 else ("downward price pressure" if pct < -0.4 else "range-bound price action")
+                explanation_text = (
+                    f"{rec} signal supported by {trend_text} ({pct:+.2f}% latest move) "
+                    f"and 20-day volatility of {vol_20d:.2f}% in Render lightweight mode."
+                )
                 return {
                     "ticker": ticker,
                     "close": round(c1, 2),
                     "change_percent": round(pct, 2),
                     "recommendation": rec,
-                    "model_probability": 0.64,
-                    "probability_margin": 0.14,
-                    "probabilities": {"BUY": 0.64 if rec == "BUY" else 0.18, "HOLD": 0.64 if rec == "HOLD" else 0.18, "SELL": 0.64 if rec == "SELL" else 0.18},
+                    "model_probability": 64.0,
+                    "probability_margin": 14.0,
+                    "probabilities": probs,
                     "random_forest": {"prediction": rec, "probabilities": probs},
                     "lstm": {"prediction": rec, "probabilities": probs},
                     "risk": {"level": "Moderate", "score": 50, "volatility_20d": vol_20d},
-                    "explanation": "Lightweight cloud signal from recent price movement.",
+                    "explanation": explanation_text,
                     "data_source": "Render Lightweight Mode",
                 }
         except Exception:
