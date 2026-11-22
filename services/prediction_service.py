@@ -658,9 +658,13 @@ def predict_stock(
         stock_data
     )
 
-    lstm_result = get_lstm_prediction(
-        stock_data
-    )
+    import os
+    if os.environ.get("RENDER", "").lower() == "true" or os.environ.get("DISABLE_LSTM_IN_SIGNALS", "1") == "1":
+        lstm_result = rf_result
+    else:
+        lstm_result = get_lstm_prediction(
+            stock_data
+        )
 
     ensemble_result = calculate_ensemble(
         rf_result,
