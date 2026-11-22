@@ -35,7 +35,6 @@ PREDICTION_RESULT_TTL = 300
 
 def prepare_stock_data(
     ticker: str,
-    period: str = "6mo",
 ):
     """
     Download live market data and prepare the feature dataset
@@ -656,7 +655,6 @@ def predict_stock(ticker: str, period: str = "6mo"):
             "explanation": "Lightweight Render free-tier signal based on recent price momentum.",
             "data_source": "Render Lightweight Mode",
         }
-    period: str = "6mo",
     """
     Complete prediction pipeline for one stock.
     """
