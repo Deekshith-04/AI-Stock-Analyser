@@ -802,7 +802,7 @@ def predict_stock(ticker: str, period: str = "6mo"):
 
 _orig_predict_stock = predict_stock
 
-def predict_stock(ticker: str):
+def predict_stock(ticker: str, period: str = "6mo"):
     import os
     if os.environ.get("RENDER", "").lower() == "true":
         try:
@@ -843,5 +843,5 @@ def predict_stock(ticker: str):
             "explanation": "Cloud fallback signal when external market feed is throttled.",
             "data_source": "Render Fallback Mode",
         }
-    return _orig_predict_stock(ticker)
+    return _orig_predict_stock(ticker, period=period)
 # SAFE_RENDER_FALLBACK_WRAPPER
