@@ -635,8 +635,8 @@ def calculate_risk(
     }
 
 
-def predict_stock(
-    ticker: str,
+def predict_stock(ticker: str):
+    import os
     if os.environ.get("RENDER", "").lower() == "true":
         from services.market_data_service import get_stock_history
         hist = get_stock_history(ticker, period="1mo")
